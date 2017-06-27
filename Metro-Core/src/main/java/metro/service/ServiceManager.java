@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import metro.service.defaults.CompressionServiceProvider;
-
 public class ServiceManager {
 
   public static final ServiceManager DEFAULT_MANAGER = new ServiceManager();
@@ -15,7 +13,7 @@ public class ServiceManager {
     return DEFAULT_MANAGER;
   }
 
-  private final Map<ProviderInfo, CompressionServiceProvider> providers = Maps.newHashMap();
+  private final Map<ProviderInfo, ServiceProvider> providers = Maps.newHashMap();
 
   public ServiceProvider getProvider(ProviderInfo info) {
     return providers.get(info);
