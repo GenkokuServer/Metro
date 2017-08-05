@@ -1,7 +1,0 @@
-package metro.service.bridge;
-
-import metro.service.Service;
-
-public interface LongFunction<R> extends Service, java.util.function.LongFunction<R> {
-
-}
