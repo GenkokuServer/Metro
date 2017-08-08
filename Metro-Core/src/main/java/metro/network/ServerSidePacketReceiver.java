@@ -36,10 +36,10 @@ public class ServerSidePacketReceiver<T extends SelectableChannel & ReadableByte
 
   private final Selector selector;
 
-  public ServerSidePacketReceiver(T channel) throws IOException {
+  public ServerSidePacketReceiver(T channel, Selector selector) throws IOException {
     this.targetChannel = channel;
-    this.selector = Selector.open();
     this.buffer = ByteBuffer.allocate(8192);
+    this.selector = selector;
 
     channel.configureBlocking(false);
     channel.register(selector, OP_READ);
@@ -56,7 +56,7 @@ public class ServerSidePacketReceiver<T extends SelectableChannel & ReadableByte
     }
   }
 
-  private void processKey(SelectionKey key) throws IOException {
+  public void processKey(SelectionKey key) throws IOException {
     if (key.isReadable()) {
       targetChannel.read(buffer);
     }

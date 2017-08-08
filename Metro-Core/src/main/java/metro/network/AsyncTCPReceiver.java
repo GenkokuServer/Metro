@@ -25,7 +25,7 @@ public class AsyncTCPReceiver implements MultiReceiver, Closeable {
   private Selector selector;
 
   private final List<NetworkClient> clientList = new ArrayList<>();
-  private final Map<NetworkClient, Receiver> receiverMap = new HashMap<>();
+  private final Map<NetworkClient, ServerSidePacketReceiver> receiverMap = new HashMap<>();
 
   private final AtomicBoolean alive = new AtomicBoolean(true);
 
@@ -59,8 +59,12 @@ public class AsyncTCPReceiver implements MultiReceiver, Closeable {
             SocketAddress address = client.getRemoteAddress();
             NetworkClient clientData = new NetworkClient(address, UUID.nameUUIDFromBytes(address.toString().getBytes()));
             clientList.add(clientData);
-            Receiver clientReceiver = new ServerSidePacketReceiver<>(client);
+            ServerSidePacketReceiver clientReceiver = new ServerSidePacketReceiver<>(client, selector);
             receiverMap.put(clientData, clientReceiver);
+          }
+
+          for (ServerSidePacketReceiver receiver : receiverMap.values()) {
+            receiver.processKey(key);
           }
         }
       }
